@@ -1,0 +1,163 @@
+# Redis test
+
+This project uses queues to handle actions that must run, but do not need to run immediately. It makes use of the [producer consumer queue pattern](https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem) with [Node](https://nodejs.org) and [Redis](https://redis.io/). The queue is persisted, so that no messages are lost.
+
+## Start Redis and Redis Commander
+
+Use the included docker compose file `docker-compose.yml` to start Redis and Redis Commander.
+
+```
+docker-compose up
+```
+
+This command starts the docker containers in the foreground. To exit use `ctrl+c`. To start the docker containers in the background use the `-d` flag (`docker-compose up -d`) and `docker-compose ps` to see what is currently running.
+ 
+Redis is accessible on `localhost` on port `6379`. Redis Commander is accessible at `http://localhost:8081`.
+
+If you started Compose with `docker-compose up -d`, stop your services with:
+
+```
+docker-compose stop
+```
+
+Bring everything down, removing the containers entirely, with the down command. Pass `--volumes` to also remove the data volume used by the Redis container:
+
+```
+docker-compose down --volumes
+```
+
+## Run examples
+
+### Install
+
+Install the dependencies with:
+
+```
+npm install
+```
+
+### Basic example
+
+The first example is a very basic plain vanilla Node Redis implementation that uses the module `redis`.
+
+The example is located in `examples/basic`.
+
+To run it execute:
+ 
+```
+node examples/basic/index.js
+```
+
+What does it do? Nothing to fancy:
+
+1. It creates a key that is persisted
+2. It creates a key that expires after 1 second and is automatically removed from Redis
+
+### Producer consumer example
+
+This is were it gets a little more interesting. This example uses the module `redis-smq`, which provides a very straight forward queue implementation.
+
+The example is located in `examples/basic`. To run it execute the following scripts in order:
+
+1. The monitor
+
+    The monitor is a very basic web interface that you can monitor the producers and consumers with.
+    
+    - Start it with `node examples/producer-consumer/monitor.js`
+    - Open a browser and go to `http://localhost:3000` 
+
+2. The producer
+
+    The producer generates 1000 random messages and sends them to the queue named `test_queue`. The Messages types are: sms and email.
+    
+    Start it with:
+    
+    ```
+    node examples/producer-consumer/producer.js
+    ```
+
+    After the messages are generated the producer exits.
+    
+3. The consumer
+
+    The consumer receives messages from the queue named `test_queue`.  
+    Start it with:
+    
+    ```
+    node examples/producer-consumer/consumer.js
+    ```
+
+    After the messages are consumed it continues to wait until exited with `ctrl+c`.
+
+## Run examples with Docker
+
+Build the Docker image with:
+
+```
+docker build -t nidkil/redis-test .
+```
+
+Check that the image is listed:
+
+```
+docker images
+```
+
+Run the image:
+
+```
+docker run -p 3000:3000 -d nidkil/redis-test
+```
+
+Display the output of the app:
+
+```
+# Get container ID
+$ docker ps
+
+# Print app output
+$ docker logs <container id>
+```
+
+If you need to access the running container use the `exec` command:
+
+```
+# Enter the container
+$ docker exec -it <container id> /bin/bash
+```
+
+## Using Docker Compose
+
+The included Docker Compose file handles starting up three containers Redis, Redis Commander and RedisSMQ. The RedisSMQ container runs the RedisSMQ Monitor and RedisSMQ Consumer. The RedisSMQ Producer must be run separately to generate the messages.
+
+Start the containers:
+
+```
+docker-compose up
+```
+
+**IMPORTANT** Changes to the source code or Dockerfile are not picked up automatically by Docker Compose. You need to restart with the `--build` flag, e.g. `docker-compose up --build`. 
+
+To start the producer:
+
+1. First get the network the containers started by Docker Compose are running on.
+
+    List the Docker networks
+    
+    ```
+    docker network ls
+    ```
+
+2. Start a new container with the RedisSMQ Producer using the same network used by the other containers. 
+
+    ```
+    docker run --network=redis-test_default -it --entrypoint=/bin/bash redis-test_producer-consumer -c "node /var/redis-test/examples/producer-consumer/producer.js" 
+    ```
+
+## References
+
+- [Redis](https://redis.io/)
+- [docker-redis](https://github.com/sameersbn/docker-redis)
+- [Redis Commander](https://github.com/joeferner/redis-commander)
+- [Docker cheat sheet](https://dockercheatsheet.painlessdocker.com/)
+- [RedisSMQ](https://github.com/weyoss/redis-smq)

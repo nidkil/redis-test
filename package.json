@@ -1,0 +1,43 @@
+{
+  "name": "redis-test",
+  "version": "0.0.1",
+  "description": "Test project to experiment with the producer consumer queue pattern using Redis and RedisSMQ",
+  "author": "nidkil <info@nidkil.me>",
+  "license": "MIT",
+  "private": true,
+  "keywords": [
+    "producer consumer",
+    "producer consumer pattern",
+    "redis",
+    "message queue",
+    "message",
+    "queue",
+    "job queue",
+    "jobs",
+    "redis-smq"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nidkil/redis-test.git"
+  },
+  "homepage": "https://github.com/nidkil/redis-test",
+  "bugs": {
+    "url": "https://github.com/nidkil/redis-test/issues"
+  },
+  "main": "./examples/producer-consumer/index.js",
+  "scripts": {
+    "start": "node ./examples/producer-consumer/index.js",
+    "run:basic": "node ./examples/basic/index.js",
+    "run:monitor": "node ./examples/producer-consumer/monitor.js",
+    "run:consumer": "node ./examples/producer-consumer/consumer.js",
+    "run:producer": "node ./examples/producer-consumer/producer.js"
+  },
+  "dependencies": {
+    "redis": "^2.8.0",
+    "redis-smq": "^1.0.22"
+  },
+  "engineStrict": true,
+  "engines": {
+    "node": ">=7.0.0"
+  }
+}
