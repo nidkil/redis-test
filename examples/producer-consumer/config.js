@@ -3,7 +3,7 @@ const path = require('path');
 const logPath = path.normalize(`${__dirname}/../logs/redis-smq.log`);
 
 module.exports = {
-  namespace: 'fwrd_communication',
+  namespace: 'redis_test',
   redis: {
     host: 'redis',
     port: 6379,

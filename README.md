@@ -1,6 +1,8 @@
 # Redis test
 
-This project uses queues to handle actions that must run, but do not need to run immediately. It makes use of the [producer consumer queue pattern](https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem) with [Node](https://nodejs.org) and [Redis](https://redis.io/). The queue is persisted, so that no messages are lost.
+This is a test project how to use queues to handle actions that must run, but do not need to run immediately. It makes use of the [producer consumer queue pattern](https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem) with [Node](https://nodejs.org) and [Redis](https://redis.io/). The queue is persisted, so that no messages are lost.
+
+It is also a discovery how to set this up using [Docker](https://docs.docker.com/) and [Docker Compose](https://docs.docker.com/compose/).
 
 ## Start Redis and Redis Commander
 
@@ -151,7 +153,7 @@ To start the producer:
 2. Start a new container with the RedisSMQ Producer using the same network used by the other containers. 
 
     ```
-    docker run --network=redis-test_default -it --entrypoint=/bin/bash redis-test_producer-consumer -c "node /var/redis-test/examples/producer-consumer/producer.js" 
+    docker run --network=redis-test_default -it --entrypoint=/bin/bash nidkil/redis-test -c "node /var/redis-test/examples/producer-consumer/producer.js" 
     ```
 
 ## References
