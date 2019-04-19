@@ -1,7 +1,7 @@
 {
   "name": "redis-test",
   "version": "0.0.1",
-  "description": "Test project to experiment with the producer consumer queue pattern using Redis and RedisSMQ",
+  "description": "Test project to experiment with the producer consumer queue pattern using Redis, RedisSMQ and Docker",
   "author": "nidkil <info@nidkil.me>",
   "license": "MIT",
   "private": true,
@@ -14,7 +14,9 @@
     "queue",
     "job queue",
     "jobs",
-    "redis-smq"
+    "redis-smq",
+    "docker",
+    "docker compose"
   ],
   "repository": {
     "type": "git",
