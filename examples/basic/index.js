@@ -2,13 +2,21 @@ const redis = require('redis');
 
 const config = {
   host: '127.0.0.1',
-  port: 6379
+  port: 6379,
+  no_ready_check: true,
+  password: 'secret'
 }
 
-client = redis.createClient(config.port, config.host);
+const client = redis.createClient(config.port, config.host);
+
+client.auth(config.password);
 
 client.on('connect', function() {
   console.log('connected');
+});
+
+client.on('error', err => {
+  console.log(err.message)
 });
 
 function cb(err, reply) {
@@ -41,3 +49,8 @@ client.exists('expireName', cbExists);
 setTimeout(function() {
   client.exists('expireName', cbExists);
 }, 2000);
+
+setTimeout(function() {
+  console.log('Shutting down gracefully');
+  process.exit(0);
+}, 4000);

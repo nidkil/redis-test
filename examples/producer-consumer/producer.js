@@ -5,7 +5,7 @@ const { displayInfo } = require('./helpers');
 const smsMsg = {
   recipients: "3112345678",
   message: "Password: Hello. This is a temporary password. Use it to login to https://domain.com/login."
-}
+};
 const emailMsg = {
   template: "welcome",
   addressing: {
@@ -40,7 +40,7 @@ const emailMsg = {
       "budget": 1000
     }
   }
-}
+};
 
 const producer = new Producer('test_queue', config);
 const ttlSevenDays = 60 * 60 * 24 * 7;

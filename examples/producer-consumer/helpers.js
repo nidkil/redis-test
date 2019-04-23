@@ -1,3 +1,5 @@
+const net = require('net');
+
 function displayInfo (id, config, monitor = false) {
   const msg = monitor ? 'server is running on' : 'is connected to';
   const cfg = monitor ? config.monitor : config.redis;
@@ -11,6 +13,26 @@ function displayInfo (id, config, monitor = false) {
   }
 }
 
+function checkConnection(host, port, timeout = 2000) {
+  return new Promise(function(resolve, reject) {
+    console.log(`checkConnection: host=${host}, port=${port}, timeout=${timeout}`);
+    const timer = setTimeout(function() {
+      reject("timeout");
+      socket.end();
+    }, timeout);
+    const socket = net.createConnection(port, host, function() {
+      clearTimeout(timer);
+      resolve();
+      socket.end();
+    });
+    socket.on('error', function(err) {
+      clearTimeout(timer);
+      reject(err);
+    });
+  });
+}
+
 module.exports = {
+  checkConnection,
   displayInfo
 }
